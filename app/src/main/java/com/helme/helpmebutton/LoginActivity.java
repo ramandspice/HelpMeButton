@@ -25,6 +25,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.helme.helpmebutton.rest.PostClient;
+import com.helme.helpmebutton.rest.requests.LoginRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -263,24 +266,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            LoginRequest request = new LoginRequest(mEmail, mPassword);
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+            PostClient client = new PostClient(request.getParams(), LoginRequest.getMethodName());
+            client.executeRequest();
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
             return true;
         }
 
