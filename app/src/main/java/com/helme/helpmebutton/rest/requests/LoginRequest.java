@@ -20,6 +20,7 @@ public class LoginRequest extends BaseRequest {
         }
     }
 
+    //Test Commit
     private static final String GRANT_TYPE = "password";
     private static final String METHOD_NAME = "logIn";
 
