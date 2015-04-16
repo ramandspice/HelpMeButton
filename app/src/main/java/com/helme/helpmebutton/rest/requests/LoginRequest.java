@@ -22,6 +22,7 @@ public class LoginRequest extends BaseRequest {
 
     private static final String METHOD_NAME = "logIn";
     private static final String GRANT_TYPE = "password";
+    private static final String METHOD_NAME = "logIn";
 
     public LoginRequest(String userName, String password) {
         super(GRANT_TYPE);

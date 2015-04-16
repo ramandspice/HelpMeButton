@@ -24,7 +24,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.helme.helpmebutton.rest.PostClient;
 import com.helme.helpmebutton.rest.requests.LoginRequest;
 
@@ -267,7 +266,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         @Override
         protected Boolean doInBackground(Void... params) {
             LoginRequest request = new LoginRequest(mEmail, mPassword);
-
             PostClient client = new PostClient(request.getParams(), LoginRequest.getMethodName());
             client.executeRequest();
 
