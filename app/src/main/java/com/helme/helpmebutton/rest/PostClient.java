@@ -1,7 +1,6 @@
 package com.helme.helpmebutton.rest;
 
 import android.util.Log;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -9,7 +8,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PostClient {
@@ -27,6 +24,7 @@ public class PostClient {
 	private List<NameValuePair> mParams;
 	private String mResponseString = "";
 	private JSONObject mResponseJSON;
+    private int mStatusCode = 400;
 
 	/************************* Constructors *************************/
 	
@@ -43,10 +41,7 @@ public class PostClient {
 	public void executeRequest() {
 		try {
 			HttpResponse httpResponse = request();
-
-
-
-            httpResponse.getStatusLine().getStatusCode();
+            mStatusCode = httpResponse.getStatusLine().getStatusCode();
 			HttpEntity entity = httpResponse.getEntity();
 			if (entity != null) {
 				InputStream instream = entity.getContent();
@@ -119,4 +114,9 @@ public class PostClient {
 
 		return mResponseJSON;
 	}
+
+    public int getStatuscode()
+    {
+        return mStatusCode;
+    }
 }

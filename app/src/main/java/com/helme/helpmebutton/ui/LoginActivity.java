@@ -1,4 +1,4 @@
-package com.helme.helpmebutton;
+package com.helme.helpmebutton.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,8 +25,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.google.gson.Gson;
+import com.helme.helpmebutton.R;
 import com.helme.helpmebutton.rest.PostClient;
 import com.helme.helpmebutton.rest.requests.LoginRequest;
+import com.helme.helpmebutton.rest.responses.LoginResponse;
+import com.helme.helpmebutton.rest.responses.WebResponse;
+import com.helme.helpmebutton.util.GSON;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -243,7 +249,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(LoginActivity.this,
+                new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -253,7 +259,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, WebResponse> {
 
         private final String mEmail;
         private final String mPassword;
@@ -264,23 +270,36 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected WebResponse doInBackground(Void... params) {
             LoginRequest request = new LoginRequest(mEmail, mPassword);
             PostClient client = new PostClient(request.getParams(), LoginRequest.getMethodName());
             client.executeRequest();
 
-            client.getResponseJSON();
-
-            return true;
+            return new WebResponse(client.getResponseString(), client.getStatuscode());
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(WebResponse webResponse) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
-                proceedLogin();
+            if (webResponse.getResponseCode() == 200) {
+                try
+                {
+                    LoginResponse loginResponse = GSON.getInstance().fromJson(webResponse.getResponseEntity(), LoginResponse.class);
+                    Log.i("LoginResponse", loginResponse.getAccessToken());
+                    Log.i("LoginResponse", loginResponse.getRefreshToken());
+                    Log.i("LoginResponse", loginResponse.getTokenType());
+                    Log.i("LoginResponse", "" + loginResponse.getExpiresIn());
+                    Log.i("LoginResponse", "" + loginResponse.getScope());
+                }
+                catch (Exception e)
+                {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    e.printStackTrace();
+                }
+
+//                proceedLogin();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

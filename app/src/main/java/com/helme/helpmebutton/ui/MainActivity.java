@@ -1,4 +1,4 @@
-package com.helme.helpmebutton;
+package com.helme.helpmebutton.ui;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -22,6 +22,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.helme.helpmebutton.R;
 
 import java.util.ArrayList;
 import java.util.UUID;
