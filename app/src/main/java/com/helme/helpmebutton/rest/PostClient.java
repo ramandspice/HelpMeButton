@@ -43,6 +43,10 @@ public class PostClient {
 	public void executeRequest() {
 		try {
 			HttpResponse httpResponse = request();
+
+
+
+            httpResponse.getStatusLine().getStatusCode();
 			HttpEntity entity = httpResponse.getEntity();
 			if (entity != null) {
 				InputStream instream = entity.getContent();

@@ -269,6 +269,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             PostClient client = new PostClient(request.getParams(), LoginRequest.getMethodName());
             client.executeRequest();
 
+            client.getResponseJSON();
+
             return true;
         }
 
