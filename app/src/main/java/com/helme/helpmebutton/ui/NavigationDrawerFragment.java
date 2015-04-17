@@ -1,5 +1,6 @@
 package com.helme.helpmebutton.ui;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -22,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.helme.helpmebutton.R;
+import com.helme.helpmebutton.application.AppState;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -248,8 +250,14 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.action_logout) {
+            AppState.getInstance().clearTokens();
+
+            getActivity().finish();
+
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+
             return true;
         }
 

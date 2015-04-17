@@ -15,17 +15,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import com.google.gson.Gson;
+import android.widget.*;
 import com.helme.helpmebutton.R;
 import com.helme.helpmebutton.application.AppState;
 import com.helme.helpmebutton.rest.PostClient;
@@ -81,6 +75,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!AppState.getInstance().getAccessToken().isEmpty() && !AppState.getInstance().getRefreshToken().isEmpty()) {
+            proceedLogin();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do Nothing
     }
 
     private void populateAutoComplete() {
