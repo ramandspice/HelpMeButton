@@ -46,6 +46,8 @@ public class PostClient {
 			if (entity != null) {
 				InputStream instream = entity.getContent();
 				setResponseString(convertStreamToString(instream));
+
+                Log.i("json", "" + mStatusCode);
 				Log.i("json", mResponseString);
 				Log.i("json", "Return response size:" + mResponseString.length());
 			}

@@ -27,8 +27,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.helme.helpmebutton.R;
+import com.helme.helpmebutton.application.AppState;
 import com.helme.helpmebutton.rest.PostClient;
 import com.helme.helpmebutton.rest.requests.LoginRequest;
+import com.helme.helpmebutton.rest.responses.LoginFailedResponse;
 import com.helme.helpmebutton.rest.responses.LoginResponse;
 import com.helme.helpmebutton.rest.responses.WebResponse;
 import com.helme.helpmebutton.util.GSON;
@@ -36,25 +38,13 @@ import com.helme.helpmebutton.util.GSON;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * A login screen that offers login via email/password.
- */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
-    // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
@@ -102,11 +92,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         startActivity(intent);
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     public void attemptLogin() {
         if (mAuthTask != null) {
             return;
@@ -287,21 +272,31 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 try
                 {
                     LoginResponse loginResponse = GSON.getInstance().fromJson(webResponse.getResponseEntity(), LoginResponse.class);
-                    Log.i("LoginResponse", loginResponse.getAccessToken());
-                    Log.i("LoginResponse", loginResponse.getRefreshToken());
-                    Log.i("LoginResponse", loginResponse.getTokenType());
-                    Log.i("LoginResponse", "" + loginResponse.getExpiresIn());
-                    Log.i("LoginResponse", "" + loginResponse.getScope());
+                    AppState.getInstance().setAccessToken(loginResponse.getAccessToken());
+                    AppState.getInstance().setRefreshToken(loginResponse.getRefreshToken());
+
+                    proceedLogin();
                 }
                 catch (Exception e)
                 {
-                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.setError(getString(R.string.error_login_failed));
+                    mPasswordView.requestFocus();
                     e.printStackTrace();
                 }
-
-//                proceedLogin();
+            } else if(webResponse.getResponseCode() == 401) {
+                try
+                {
+                    LoginFailedResponse failedResponse = GSON.getInstance().fromJson(webResponse.getResponseEntity(), LoginFailedResponse.class);
+                    mPasswordView.setError(failedResponse.getErrorDescription());
+                    mPasswordView.requestFocus();
+                }
+                catch (Exception e) {
+                    mPasswordView.setError(getString(R.string.error_login_failed));
+                    mPasswordView.requestFocus();
+                    e.printStackTrace();
+                }
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError(getString(R.string.error_login_failed));
                 mPasswordView.requestFocus();
             }
         }

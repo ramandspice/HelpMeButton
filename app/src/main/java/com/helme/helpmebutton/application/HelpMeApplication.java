@@ -11,5 +11,6 @@ public class HelpMeApplication extends Application
         super.onCreate();
 
         GSON.getInstance().initialize();
+        AppState.initialize(this);
     }
 }
