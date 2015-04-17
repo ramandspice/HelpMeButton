@@ -2,19 +2,19 @@ package com.helme.helpmebutton.rest.responses;
 
 public class LoginResponse {
 
-    private String accessToken;
-    private Integer expiresIn;
-    private String tokenType;
+    private String access_token;
+    private Integer expires_in;
+    private String token_type;
     private Object scope;
-    private String refreshToken;
+    private String refresh_token;
 
     /**
      *
      * @return
-     * The accessToken
+     * The access_token
      */
     public String getAccessToken() {
-        return accessToken;
+        return access_token;
     }
 
     /**
@@ -23,16 +23,16 @@ public class LoginResponse {
      * The access_token
      */
     public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+        this.access_token = accessToken;
     }
 
     /**
      *
      * @return
-     * The expiresIn
+     * The expires_in
      */
     public Integer getExpiresIn() {
-        return expiresIn;
+        return expires_in;
     }
 
     /**
@@ -41,16 +41,16 @@ public class LoginResponse {
      * The expires_in
      */
     public void setExpiresIn(Integer expiresIn) {
-        this.expiresIn = expiresIn;
+        this.expires_in = expiresIn;
     }
 
     /**
      *
      * @return
-     * The tokenType
+     * The token_type
      */
     public String getTokenType() {
-        return tokenType;
+        return token_type;
     }
 
     /**
@@ -59,7 +59,7 @@ public class LoginResponse {
      * The token_type
      */
     public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
+        this.token_type = tokenType;
     }
 
     /**
@@ -83,10 +83,10 @@ public class LoginResponse {
     /**
      *
      * @return
-     * The refreshToken
+     * The refresh_token
      */
     public String getRefreshToken() {
-        return refreshToken;
+        return refresh_token;
     }
 
     /**
@@ -95,6 +95,6 @@ public class LoginResponse {
      * The refresh_token
      */
     public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+        this.refresh_token = refreshToken;
     }
 }
