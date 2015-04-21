@@ -75,6 +75,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        TextView signUpLink = (TextView) findViewById(R.id.signup_link);
+        signUpLink.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -250,9 +259,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, WebResponse> {
+     * the user.*/
+    private class UserLoginTask extends AsyncTask<Void, Void, WebResponse> {
 
         private final String mEmail;
         private final String mPassword;
