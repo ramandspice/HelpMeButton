@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.helme.helpmebutton.R;
 import com.helme.helpmebutton.application.AppState;
@@ -47,7 +49,7 @@ public class SignUpActivity extends Activity {
         mEmailView = (TextView) findViewById(R.id.signup_form_email);
         mPhoneView = (TextView) findViewById(R.id.signup_form_phone);
         mDobView = (TextView) findViewById(R.id.signup_form_dob);
-        mPasswordView= (TextView) findViewById(R.id.signup_password);
+        mPasswordView = (TextView) findViewById(R.id.signup_password);
         mProgressView = findViewById(R.id.signup_progress);
         mLoginFormView = findViewById(R.id.signup_form_scrollview);
 
@@ -217,34 +219,11 @@ public class SignUpActivity extends Activity {
             showProgress(false);
 
             if (webResponse.getResponseCode() == 200) {
-                try
-                {
-                    LoginResponse loginResponse = GSON.getInstance().fromJson(webResponse.getResponseEntity(), LoginResponse.class);
-                    AppState.getInstance().setAccessToken(loginResponse.getAccessToken());
-                    AppState.getInstance().setRefreshToken(loginResponse.getRefreshToken());
-
-//                    proceedLogin();
-                }
-                catch (Exception e)
-                {
-                    mPasswordView.setError(getString(R.string.error_login_failed));
-                    mPasswordView.requestFocus();
-                    e.printStackTrace();
-                }
-            } else if(webResponse.getResponseCode() == 401) {
-                try
-                {
-                    LoginFailedResponse failedResponse = GSON.getInstance().fromJson(webResponse.getResponseEntity(), LoginFailedResponse.class);
-                    mPasswordView.setError(failedResponse.getErrorDescription());
-                    mPasswordView.requestFocus();
-                }
-                catch (Exception e) {
-                    mPasswordView.setError(getString(R.string.error_login_failed));
-                    mPasswordView.requestFocus();
-                    e.printStackTrace();
-                }
+                Toast.makeText(SignUpActivity.this, "Sign Up Successful, Please Log In.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                startActivity(intent);
             } else {
-                mPasswordView.setError(getString(R.string.error_login_failed));
+                mPasswordView.setError(getString(R.string.error_signup_failed));
                 mPasswordView.requestFocus();
             }
         }
